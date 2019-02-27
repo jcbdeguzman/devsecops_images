@@ -1,78 +1,77 @@
 version: '3'
 services:
-  nginx:
-    container_name: nginx
-    image: nginx
-    restart: always
-    networks:
-      - tools_network
-    ports:
-      - 80:80
-    volumes:
-      - nginx_conf:/etc/nginx/
-      - nginx_html:/usr/share/nginx/html/
-  gitlab:
-    container_name: gitlab
-    #image: 'gitlab/gitlab-ce:latest'
-    image: 'gitlab/gitlab-ce:8.15.4-ce.1'
-    restart: always
-    networks:
-      - tools_network
-    environment:
-      GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://ipaddress'
-    expose:
-      - '80'
-    #volumes:
-    #  - '/srv/gitlab/config:/etc/gitlab'
-    #  - '/srv/gitlab/logs:/var/log/gitlab'
-    #  - '/srv/gitlab/data:/var/opt/gitlab'
-  jira:
-    container_name: jira
-    image: cptactionhank/atlassian-jira:latest
-    restart: always
-    networks:
-      - tools_network
-    #links:
-    #  - database
-    ports:
-      - 8080:8080
-    #volumes:
-    #  - jira-data:/var/atlassian/jira
-    #environment:
-    #  - CATALINA_OPTS=-Xms768m -Xmx1024m
-    #  - JIRA_CONTEXT_PATH=/
-     # - X_PROXY_NAME=ipaddress
-     # - X_PROXY_PORT=8080
-     # - X_PROXY_SCHEME=http
- 
-  confluence:
-    container_name: confluence
-    image: cptactionhank/atlassian-confluence:latest
-    restart: always
-    networks:
-      - tools_network
-    links:
-      - database
-    volumes:
-      - confluence-data:/var/atlassian/confluence
- 
-  database:
-    container_name: postgres
-    image: postgres:9.6
-    restart: always
-    networks:
-      - tools_network
-    volumes:
-      - database-data:/var/lib/postgresql/data
- 
-volumes:
-  nginx_conf:
-  nginx_html:
-  jira-data:
-  confluence-data:
-  database-data:
- 
-networks:
-  tools_network:
+  nginx:
+    container_name: nginx
+    image: nginx
+    restart: always
+    networks:
+      - tools_network
+    ports:
+      - 80:80
+    volumes:
+      - nginx_conf:/etc/nginx/
+      - nginx_html:/usr/share/nginx/html/
+  gitlab:
+    container_name: gitlab
+    #image: 'gitlab/gitlab-ce:latest'
+    image: 'gitlab/gitlab-ce:8.15.4-ce.1'
+    restart: always
+    networks:
+      - tools_network
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://ipaddress'
+    expose:
+      - '80'
+    #volumes:
+    #  - '/srv/gitlab/config:/etc/gitlab'
+    #  - '/srv/gitlab/logs:/var/log/gitlab'
+    #  - '/srv/gitlab/data:/var/opt/gitlab'
+  jira:
+    container_name: jira
+    image: cptactionhank/atlassian-jira:latest
+    restart: always
+    networks:
+      - tools_network
+    #links:
+    #  - database
+    ports:
+      - 8080:8080
+    #volumes:
+    #  - jira-data:/var/atlassian/jira
+    #environment:
+    #  - CATALINA_OPTS=-Xms768m -Xmx1024m
+    #  - JIRA_CONTEXT_PATH=/
+     # - X_PROXY_NAME=ipaddress
+     # - X_PROXY_PORT=8080
+     # - X_PROXY_SCHEME=http
 
+  confluence:
+    container_name: confluence
+    image: cptactionhank/atlassian-confluence:latest
+    restart: always
+    networks:
+      - tools_network
+    links:
+      - database
+    volumes:
+      - confluence-data:/var/atlassian/confluence
+
+  database:
+    container_name: postgres
+    image: postgres:9.6
+    restart: always
+    networks:
+      - tools_network
+    volumes:
+      - database-data:/var/lib/postgresql/data
+
+volumes:
+  nginx_conf:
+  nginx_html:
+  jira-data:
+  confluence-data:
+  database-data:
+
+networks:
+  tools_network:
