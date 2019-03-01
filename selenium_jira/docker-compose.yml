@@ -3,19 +3,13 @@ services:
   nginx:
     container_name: nginx
     image: nginx
+    restart: always
+    links:
+      - selenium-hub:hub
     depends_on:
       - selenium-node-chrome
       - selenium-node-firefox
       - selenium-hub
-    links:
-      - selenium-hub:hub
-    environment:
-      OFFLOAD_TO_HOST: 'hub'
-      OFFLOAD_TO_PORT: 4444
-      SERVICE_NAME: 'selenium-hub'
-      HEALTH_CHECK_PATH: '/status'
-      ENFORCE_HTTPS: 'false'
-    restart: always
     networks:
       - tools_network
     ports:
@@ -49,6 +43,7 @@ services:
       - tools_network
     volumes:
       - database-data:/var/lib/postgresql/data
+
   selenium-node-firefox:
     image: selenium/node-firefox:latest
     links:
