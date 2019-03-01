@@ -1,0 +1,78 @@
+version: '3'
+services:
+  nginx:
+    container_name: nginx
+    image: nginx
+    restart: always
+    networks:
+      - tools_network
+    ports:
+      - 80:80
+    volumes:
+      - nginx_conf:/etc/nginx/
+      - nginx_html:/usr/share/nginx/html/
+  jira:
+    container_name: jira
+    image: cptactionhank/atlassian-jira:latest
+    restart: always
+    networks:
+      - tools_network
+    ports:
+      - 8080:8080
+  confluence:
+    container_name: confluence
+    image: cptactionhank/atlassian-confluence:latest
+    restart: always
+    networks:
+      - tools_network
+    links:
+      - database
+    volumes:
+      - confluence-data:/var/atlassian/confluence
+  database:
+    container_name: postgres
+    image: postgres:9.6
+    restart: always
+    networks:
+      - tools_network
+    volumes:
+      - database-data:/var/lib/postgresql/data
+  sonarqube:
+    image: sonarqube
+    ports:
+      - "9000:9000"
+    networks:
+      - sonarnet
+    environment:
+      - sonar.jdbc.url=jdbc:postgresql://db:5432/sonar
+    volumes:
+      - sonarqube_conf:/opt/sonarqube/conf
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+  db:
+    image: postgres
+    networks:
+      - sonarnet
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+    volumes:
+      - postgresql:/var/lib/postgresql
+      - postgresql_data:/var/lib/postgresql/data
+
+volumes:
+  nginx_conf:
+  nginx_html:
+  jira-data:
+  confluence-data:
+  database-data:
+  sonarqube_conf:
+  sonarqube_data:
+  sonarqube_extensions:
+  postgresql:
+  postgresql_data:
+
+networks:
+  tools_network:
+  sonarnet:
+    driver: bridge
