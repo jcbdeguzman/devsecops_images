@@ -7,7 +7,7 @@ services:
     networks:
       - tools_network
     ports:
-      - 80:80
+      - 80
     volumes:
       - nginx_conf:/etc/nginx/
       - nginx_html:/usr/share/nginx/html/
